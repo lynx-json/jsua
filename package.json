@@ -1,0 +1,34 @@
+{
+  "name": "jsua",
+  "version": "0.1.0",
+  "description": "A generic embeddable user agent written in JavaScript.",
+  "main": "lib/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha --recursive test",
+    "build": "./scripts/build.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lynx-json/jsua.git"
+  },
+  "keywords": [
+    "jsua",
+    "web",
+    "browser"
+  ],
+  "author": "lynx-json.org",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lynx-json/jsua/issues"
+  },
+  "homepage": "https://github.com/lynx-json/jsua#readme",
+  "devDependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-preset-env": "^1.1.8",
+    "babelify": "^7.3.0"
+  },
+  "dependencies": {}
+}
