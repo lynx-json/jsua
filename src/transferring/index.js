@@ -1,6 +1,6 @@
-import * as http from "./http";
-import * as data from "./data";
+import * as http_data from "./http-data";
 import * as urlModule from "url";
+const transferrers = {};
 
 function transfer(request) {
   // url - the resource URI to send a message to
@@ -21,18 +21,17 @@ function transfer(request) {
   if (!protocol) throw new Error("'request.url' param must have a protocol scheme.");
   
   protocol = protocol.replace(":", "");
-  if (protocol in transfer.transferrers === false) throw new Error("No transferrer registered for protocol: " + protocol);
+  if (protocol in transferrers === false) throw new Error("No transferrer registered for protocol: " + protocol);
   
-  var transferrer = transfer.transferrers[protocol];
+  var transferrer = transferrers[protocol];
   return transferrer(request);
 }
 
-const transferrers = {};
 transfer.register = function registerTransferrer(scheme, transferrer) {
   transferrers[scheme] = transferrer;
 };
 
-transfer.register("http", http.transfer);
-transfer.register("data", data.transfer);
+transfer.register("http", http_data.transfer);
+transfer.register("data", http_data.transfer);
 
 export { transfer };
