@@ -1,19 +1,32 @@
 import createMediaTypePredicate from "./create-media-type-predicate";
 
 function render(content) {
-  // TODO: implement rendering for registered renderers based on content.type
-  return {
-    content,
-    element: {}
-  };
+  if (!content || !content.blob) throw new Error("'content' and 'content.blob' params are required.");
+  
+  var registration = render.registrations.find(registration => registration.predicate(content.blob.type));
+  if (!registration) throw new Error("No renderer registered for content type '" + content.blob.type + "'");
+  
+  return registration.renderer(content);
 }
 
-var renderers = [];
+render.registrations = [];
+
 render.register = function registerRenderer(mediaType, renderer) {
-  var registration = { mediaType, renderer };
+  if (!mediaType) throw new Error("'mediaType' param is required.");
+  if (!renderer) throw new Error("'renderer' param is required.");
+  
+  var registration = render.registrations.find(registration => registration.mediaType === mediaType);
+  if (registration) {
+    let index = render.registrations.indexOf(registration);
+    render.registrations.splice(index, 1);
+  }
+  
+  registration = { mediaType, renderer };
   registration.predicate = createMediaTypePredicate(mediaType);
-  renderers.push(registration);
-  renderers = renderers.sort((x,y) => x.predicate.specificity < y.predicate.specificity);
+  render.registrations.push(registration);
+  
+  var sorted = render.registrations.sort((x,y) => x.predicate.specificity < y.predicate.specificity);
+  Array.prototype.splice.call(render.registrations, [0, render.registrations.length], sorted);
 };
 
 
@@ -23,9 +36,10 @@ function attach(result) {
   return result;
 }
 
-const attachers = [];
-attach.register = function registerAttacher(priority, attacher) {
-  attachers.push({ priority, attacher });
+attach.registrations = [];
+
+attach.register = function registerAttacher(attacher) {
+  attach.registrations.push(attacher);
 };
 
 
