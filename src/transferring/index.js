@@ -1,5 +1,5 @@
-import http from "./http";
-import data from "./data";
+import * as http from "./http";
+import * as data from "./data";
 import * as urlModule from "url";
 
 function transfer(request) {
@@ -27,12 +27,12 @@ function transfer(request) {
   return transferrer(request);
 }
 
-transfer.transferrers = {};
+const transferrers = {};
 transfer.register = function registerTransferrer(scheme, transferrer) {
-  transfer.transferrers[scheme] = transferrer;
+  transferrers[scheme] = transferrer;
 };
 
 transfer.register("http", http.transfer);
 transfer.register("data", data.transfer);
 
-export default { transfer };
+export { transfer };

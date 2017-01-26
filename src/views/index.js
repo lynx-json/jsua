@@ -30,4 +30,4 @@ attach.register = function registerAttacher(priority, attacher) {
 
 
 
-export default { render, attach };
+export { render, attach };

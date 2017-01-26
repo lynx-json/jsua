@@ -1,2 +1,3 @@
 import EventEmitter from "events";
-export default new EventEmitter();
+const hub = new EventEmitter();
+export { hub };

@@ -3,4 +3,4 @@ function transfer(request) {
   return { url: request.url, type: "", data: "http" };
 }
 
-export default { transfer };
+export { transfer };

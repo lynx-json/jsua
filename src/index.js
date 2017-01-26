@@ -1,7 +1,7 @@
-import messaging from "./messaging";
-import transferring from "./transferring";
-import views from "./views";
-import finishing from "./finishing";
+import * as messaging from "./messaging";
+import * as transferring from "./transferring";
+import * as views from "./views";
+import * as finishing from "./finishing";
 import * as urlModule from "url";
 
 export function fetch(url, options) {
@@ -13,26 +13,19 @@ export function fetch(url, options) {
 }
 
 export function on(type, listener) {
-  messaging.on(type, listener);
+  messaging.hub.on(type, listener);
 }
 
 export function emit(type, evt) {
-  messaging.emit(type, evt);
+  messaging.hub.emit(type, evt);
 }
-
-export var modules = {
-  messaging,
-  transferring,
-  views,
-  finishing
-};
 
 export function resolveURI(base, uri) {
   return urlModule.resolve(base, uri);
 }
 
 export function error(err) {
-  messaging.emit("error", err);
+  messaging.hub.emit("error", err);
 }
 
 // *** I THINK THIS STUFF BELONGS IN THE VIEWS MODULE ***
