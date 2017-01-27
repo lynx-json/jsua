@@ -2,13 +2,6 @@ import * as http_data from "./http-data";
 import * as urlModule from "url";
 
 function transfer(request) {
-  // url - the resource URI to send a message to
-  // options.method   - the method to use for transferring
-  // options.form     - the Form API object representing the form data submission
-  //                    converted to a message body via encoding (see: options.enctype)
-  // options.enctype  - the encoding to use to encode form into message body
-  // options.body     - an already encoded message body
-  //                    if both body and form are present, form is ignored
   if (!request) throw new Error("'request' param is required.");
   
   var url = request.url;
