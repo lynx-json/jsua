@@ -1,6 +1,7 @@
 import createMediaTypePredicate from "./create-media-type-predicate";
+import * as html from "./plaf-html";
 
-function render(content) {
+export function render(content) {
   if (!content || !content.blob) throw new Error("'content' and 'content.blob' params are required.");
   
   var registration = render.registrations.find(registration => registration.predicate(content.blob.type));
@@ -31,17 +32,25 @@ render.register = function registerRenderer(mediaType, renderer) {
 
 
 
-function attach(result) {
-  // TODO: implement attachment for registered attachers
+export function attach(result) {
+  if (!result) throw new Error("'result' param is required.");
+  
+  attach.registrations.forEach(registration => {
+    if (plaf.isAttached(result.view)) return;
+    registration.attacher(result);
+  });
+  
+  if (plaf.isAttached(result.view) === false) {
+    throw new Error("The view was unable to attach.");
+  }
+  
   return result;
 }
 
 attach.registrations = [];
 
 attach.register = function registerAttacher(attacher) {
-  attach.registrations.push(attacher);
+  attach.registrations.push({ attacher });
 };
 
-
-
-export { render, attach };
+export var plaf = html;

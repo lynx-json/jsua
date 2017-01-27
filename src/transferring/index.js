@@ -32,6 +32,7 @@ transfer.register = function registerTransferrer(protocol, transferrer) {
   transfer.registrations[protocol] = transferrer;
 };
 
+transfer.register("https", http_data.transfer);
 transfer.register("http", http_data.transfer);
 transfer.register("data", http_data.transfer);
 
