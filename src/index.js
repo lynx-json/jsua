@@ -1,15 +1,14 @@
 import * as messaging from "./messaging";
 import * as transferring from "./transferring";
 import * as views from "./views";
-import * as finishing from "./finishing";
 import * as urlModule from "url";
 
 export function fetch(url, options) {
   return Promise.resolve({ url, options })
     .then(transferring.transfer)
-    .then(views.render)
+    .then(views.build)
     .then(views.attach)
-    .then(finishing.finish);
+    .then(views.finish);
 }
 
 export function on(type, listener) {

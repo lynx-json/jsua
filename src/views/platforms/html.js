@@ -14,7 +14,7 @@ export function getRootView() {
   return rootView;
 }
 
-function pageAttacher(result) {
+export function pageAttacher(result) {
   if (!rootView) return;
   
   while (rootView.firstElementChild) {
@@ -24,11 +24,13 @@ function pageAttacher(result) {
   rootView.appendChild(result.view);
 }
 
-export var attachers = {
-  page: pageAttacher
-};
+export function getAttachers() {
+  return {
+    page: pageAttacher
+  };
+}
 
-export function renderTextToHtml(content) {
+export function buildTextAsHtml(content) {
   return new Promise(function (resolve, reject) {
     var fileReader = new FileReader();
     
@@ -43,9 +45,11 @@ export function renderTextToHtml(content) {
   });
 }
 
-export var renderers = {
-  text: {
-    mediaType: "text/*",
-    renderer: renderTextToHtml
-  }
-};
+export function getBuilders() {
+  return {
+    text: {
+      mediaType: "text/*",
+      builder: buildTextAsHtml
+    }
+  };
+}
