@@ -14,7 +14,7 @@ export function getRootView() {
   return rootView;
 }
 
-export function pageAttacher(result) {
+export function rootAttacher(result) {
   if (!rootView) return;
   
   while (rootView.firstElementChild) {
@@ -25,9 +25,12 @@ export function pageAttacher(result) {
 }
 
 export function getAttachers() {
-  return {
-    page: pageAttacher
-  };
+  return [
+    {
+      name: "root",
+      attacher: rootAttacher
+    }
+  ];
 }
 
 export function buildTextAsHtml(content) {
@@ -46,10 +49,10 @@ export function buildTextAsHtml(content) {
 }
 
 export function getBuilders() {
-  return {
-    text: {
+  return [
+    {
       mediaType: "text/*",
       builder: buildTextAsHtml
     }
-  };
+  ];
 }
