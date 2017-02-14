@@ -1,13 +1,17 @@
-import * as _build from "./build";
-import * as _attach from "./attach";
-import * as _finish from "./finish";
-import * as _platforms from "./platforms";
-import * as html from "./platforms/html";
+import * as building from "./building";
+import * as attaching from "./attaching";
+import * as finishing from "./finishing";
+import * as htmlPlatform from "./html-platform";
 
-_platforms.register("html", html);
-_platforms.set(html);
+export function setPlatform(platform) {
+  building.setPlatform(platform);
+  attaching.setPlatform(platform);
+  finishing.setPlatform(platform);
+}
 
-export var build = _build.build;
-export var attach = _attach.attach;
-export var finish = _finish.finish;
-export var platforms = _platforms;
+export {
+  building,
+  attaching,
+  finishing,
+  htmlPlatform
+};

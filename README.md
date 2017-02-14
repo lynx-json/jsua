@@ -1,4 +1,5 @@
-# jsua
+# jsua (PRELIMINARY DOCUMENTATION)
+
 A generic and embeddable user agent written in JavaScript.
 
 ## transferring

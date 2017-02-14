@@ -6,9 +6,9 @@ import * as urlModule from "url";
 export function fetch(url, options) {
   return Promise.resolve({ url, options })
     .then(transferring.transfer)
-    .then(views.build)
-    .then(views.attach)
-    .then(views.finish);
+    .then(views.building.build)
+    .then(views.attaching.attach)
+    .then(views.finishing.finish);
 }
 
 export function on(type, listener) {
