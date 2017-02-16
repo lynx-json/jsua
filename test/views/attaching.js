@@ -1,6 +1,7 @@
 var attaching = require("../../lib/views/attaching");
 var chai = require("chai");
 var chaiAsPromised = require("chai-as-promised");
+var sinon = require("sinon");
 
 chai.use(chaiAsPromised);
 var should = chai.should();
@@ -23,26 +24,24 @@ describe("attaching", function () {
   });
   
   it("should reject when there are no registrations", function () {
-    attaching.setPlatform({});
+    attaching.isAttached = function () { return false; };
     attaching.attach({ view: {} }).should.be.rejected;
   });
   
   it("should reject when the view is not attached", function () {
-    attaching.setPlatform({
-      isAttached: function () { return false; }
-    });
+    attaching.isAttached = function () { return false; };
     attaching.register("mock-attacher", function () {});
     attaching.attach({ view: {} }).should.be.rejected;
   });
   
   it("should resolve when the view is attached", function () {
-    attaching.setPlatform({
-      isAttached: function () { return true; }
-    });
-    
+    let isAttached = sinon.stub().returns(true);
+    attaching.setIsAttached(isAttached);
     attaching.register("mock-attacher", function () {});
     
     let result = { view: {} };
     attaching.attach(result).should.eventually.equal(result);
+    
+    isAttached.called.should.be.true;
   });
 });
