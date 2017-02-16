@@ -1,7 +1,12 @@
 export var registrations = [];
 
 export function finish(result) {
-  // TODO: implement the calling of all registered finishing functions
+  if (!result) throw new Error("'result' param is required.");
+  if (!result.view) throw new Error("'result' object must have 'view' property.");
+  if (!result.content) throw new Error("'result' object must have 'content' property.");
+  
+  registrations.forEach(registration => registration.finisher(result));
+  
   return result;
 }
 
