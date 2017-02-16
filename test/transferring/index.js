@@ -22,14 +22,20 @@ describe("transferring", function () {
     transferring.transfer({ url: "/foo" }).should.be.rejected;
   });
   
+  it("should reject when there are no registrations", function () {
+    transferring.registrations.splice(0, transferring.registrations.length);
+    transferring.transfer({ url: "foo://" }).should.be.rejected;
+  });
+  
   it("should reject when request 'url' protocol scheme is unregistered", function () {
     transferring.transfer({ url: "foo://" }).should.be.rejected;
   });
   
   it("should register handler function in registrations", function () {
     function fooHandler() {
-      return Promise.resolve(expected);
+      return Promise.resolve({});
     }
+    
     transferring.register("foo", fooHandler);
     
     var found = transferring.registrations.some(registration => {

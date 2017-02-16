@@ -1,9 +1,4 @@
-var platform;
 export var registrations = [];
-
-export function setPlatform(plaf) {
-  platform = plaf;
-}
 
 export function finish(result) {
   // TODO: implement the calling of all registered finishing functions

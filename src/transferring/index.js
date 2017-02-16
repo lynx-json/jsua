@@ -5,8 +5,8 @@ export var registrations = [];
 
 export function transfer(request) {
   if (!request) return Promise.reject(new Error("'request' param is required."));
-  if (typeof request !== "object") return Promise.reject(new Error("'request' param must be an object."));
   if (!request.url) return Promise.reject(new Error("'request' object must have 'url' property."));
+  if (registrations.length === 0) return Promise.reject(new Error("No transferrers have been registered."));
   
   var url = request.url;
   var options = request.options;

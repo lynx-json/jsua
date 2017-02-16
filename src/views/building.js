@@ -1,19 +1,22 @@
 import createMediaTypePredicate from "./create-media-type-predicate";
 
-var platform;
 export var registrations = [];
 
-export function setPlatform(plaf) {
-  platform = plaf;
-}
-
 export function build(content) {
-  if (!content || !content.blob) throw new Error("'content' and 'content.blob' params are required.");
+  if (!content) return Promise.reject(new Error("'content' param is required."));
+  if (!content.blob) return Promise.reject(new Error("'content' object must have a 'blob' property."));
+  if (!content.blob.type) return Promise.reject(new Error("'content.blob' object must have a 'type' property."));
+  if (registrations.length === 0) return Promise.reject(new Error("No builders have been registered."));
   
   var registration = registrations.find(registration => registration.predicate(content.blob.type));
-  if (!registration) throw new Error("No builder registered for content type '" + content.blob.type + "'");
+  if (!registration) return Promise.reject(new Error("No builder registered for content type '" + content.blob.type + "'"));
   
-  return registration.builder(content);
+  return registration.builder(content).then(view => {
+    return {
+      content: content,
+      view: view
+    };
+  });
 }
 
 export function register(mediaType, builder) {

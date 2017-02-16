@@ -25,20 +25,19 @@ The `transfer` function returns a Promise for an object, called a content object
 
 The views subpackage exports an object with the following properties:
 
-* `construct` function
-* `attach` function
-* `finish` function
-* `plaf` object
+* `building` subpackage
+* `attaching` subpackage
+* `finishing` subpackage
 
-The `render` function is used to create a view for any given content object. It accepts a single parameter which is the content object to be rendered. The `render` function will delegate the call to a registered render function for the media type of the content (`content.blob.type`). To register a render function for a given media type, call the `register` function of the `render` function. For example:
+The `building.build` function is used to create a view for any given content object. It accepts a single parameter which is the content object for which to build a view. The `building.build` function will delegate the call to a registered builder function for the media type of the content (`content.blob.type`). To register a builder function for a given media type, call the `building.register` function. For example:
 
-* `render.register("text/plain", aTextPlainRenderFunction);`
-* `render.register("text/*", aTextAnyRenderFunction);`
-* `render.register("*/*", aGenericRenderFunction)`
+* `building.register("text/plain", aTextPlainBuilderFunction);`
+* `building.register("text/*", aTextAnyBuilderFunction);`
+* `building.register("*/*", aGenericBuilderFunction)`
 
-The `render` function returns a Promise for an object having the following properties:
+The `building.build` function returns a Promise for an object having the following properties:
 
-* `content` - the content object that was passed into render
+* `content` - the content object that was passed into builder
 * `view` - an unattached view of the content
 
-The `attach` function is used to attach a view to a view hierarchy. It accepts a single parameter which has the same interface as the return parameter of the `render` function. The `attach` function will delegate the call to the registered attach functions in the order they are registered until the view is attached. After the view is attached, the `attach` function will return. The return parameter has the same interface as the input parameter.
+The `attaching.attach` function is used to attach a view to a view hierarchy. It accepts a single parameter which has the same interface as the return parameter of the `building.build` function. The `attaching.attach` function will delegate the call to the registered attach functions in the order they are registered until the view is attached. After the view is attached, the `attaching.attach` function will return. The return parameter has the same interface as the input parameter.

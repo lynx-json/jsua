@@ -40,8 +40,7 @@ export function buildTextAsHtml(content) {
     fileReader.onloadend = function (evt) {
       var view = document.createElement("pre");
       view.textContent = evt.target.result;
-      var result = { content, view };
-      resolve(result);
+      resolve(view);
     };
     
     fileReader.readAsText(content.blob);
