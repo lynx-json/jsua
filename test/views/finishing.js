@@ -12,7 +12,7 @@ describe("finishing", function () {
     }).to.throw;
   });
   
-  it("should throw param is not an object", function () {
+  it("should throw when param is not an object", function () {
     expect(function () {
       finishing.finish("this is not a build/attach result");
     }).to.throw;
