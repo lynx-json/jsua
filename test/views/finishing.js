@@ -9,31 +9,31 @@ describe("finishing", function () {
   it("should throw when no params", function () {
     expect(function () {
       finishing.finish();
-    }).to.throw;
+    }).to.throw(Error);
   });
   
   it("should throw when param is not an object", function () {
     expect(function () {
       finishing.finish("this is not a build/attach result");
-    }).to.throw;
+    }).to.throw(Error);
   });
   
   it("should throw when param doesn't have a 'content' property", function () {
     expect(function () {
       finishing.finish({});
-    }).to.throw;
+    }).to.throw(Error);
   });
   
   it("should throw when param doesn't have a 'view' property", function () {
     expect(function () {
       finishing.finish({ content: {} });
-    }).to.throw;
+    }).to.throw(Error);
   });
   
   it("should not throw when param has 'content' and 'view' properties", function () {
     expect(function () {
       finishing.finish({ content: {}, view: {} });
-    }).to.not.throw;
+    }).to.not.throw(Error);
   });
   
   it("should call finishers with result", function () {
