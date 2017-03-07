@@ -1,6 +1,6 @@
 {
   "name": "jsua",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A generic embeddable user agent written in JavaScript.",
   "main": "lib/index.js",
   "directories": {
