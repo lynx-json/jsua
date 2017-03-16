@@ -5,11 +5,12 @@ export var registrations = [];
 export function build(content) {
   if (!content) return Promise.reject(new Error("'content' param is required."));
   if (!content.blob) return Promise.reject(new Error("'content' object must have a 'blob' property."));
-  if (!content.blob.type) return Promise.reject(new Error("'content.blob' object must have a 'type' property."));
+  if ("type" in content.blob === false) return Promise.reject(new Error("'content.blob' object must have a 'type' property."));
   if (registrations.length === 0) return Promise.reject(new Error("No builders have been registered."));
   
-  var registration = registrations.find(registration => registration.predicate(content.blob.type));
-  if (!registration) return Promise.reject(new Error("No builder registered for content type '" + content.blob.type + "'"));
+  var type = content.blob.type || "application/octet-stream";
+  var registration = registrations.find(registration => registration.predicate(type));
+  if (!registration) return Promise.reject(new Error("No builder registered for content type '" + type + "'"));
   
   return registration.builder(content).then(view => {
     return {
