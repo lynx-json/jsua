@@ -33,7 +33,7 @@ describe("transferring / http", function () {
   });
 });
 
-describe.only("transferring / data", function () {
+describe("transferring / data", function () {
   it("should resolve UTF-8 data", function () {
     let url = "data:text/plain,Hi";
     
