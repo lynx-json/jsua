@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "mocha --recursive test",
+    "pretest": "npm run build",
     "build": "babel src -d lib"
   },
   "repository": {
