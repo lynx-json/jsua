@@ -1,5 +1,7 @@
 # jsua (PRELIMINARY DOCUMENTATION)
 
+[![Build Status](https://travis-ci.org/lynx-json/jsua.svg?branch=master)](https://travis-ci.org/lynx-json/jsua)
+
 A generic and embeddable user agent written in JavaScript.
 
 ## transferring
