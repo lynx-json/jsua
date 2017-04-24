@@ -1,4 +1,4 @@
-var attaching = require("../../lib/views/attaching");
+var attaching = require("../lib/attaching");
 var chai = require("chai");
 var chaiAsPromised = require("chai-as-promised");
 var sinon = require("sinon");

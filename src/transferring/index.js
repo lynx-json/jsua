@@ -1,5 +1,3 @@
-import * as http from "./http";
-import * as data from "./data";
 import * as urlModule from "url";
 
 export var registrations = [];
@@ -35,7 +33,3 @@ export function register(protocol, transferrer) {
     registrations.push(newRegistration);
   }
 }
-
-register("https", http.transfer);
-register("http", http.transfer);
-register("data", data.transfer);

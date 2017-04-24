@@ -1,4 +1,4 @@
-var building = require("../../lib/views/building");
+var building = require("../lib/building");
 var chai = require("chai");
 var chaiAsPromised = require("chai-as-promised");
 
