@@ -24,24 +24,35 @@ describe("attaching", function () {
   });
   
   it("should reject when there are no registrations", function () {
-    attaching.isAttached = function () { return false; };
     attaching.attach({ view: {} }).should.be.rejected;
   });
   
   it("should reject when the view is not attached", function () {
-    attaching.isAttached = function () { return false; };
     attaching.register("mock-attacher", function () {});
     attaching.attach({ view: {} }).should.be.rejected;
   });
   
+  it("should reject when the view is discarded", function () {
+    attaching.register("mock-attacher", function () {
+      return {
+        discard: true
+      };
+    });
+    attaching.attach({ view: {} }).should.be.rejected;
+  });
+  
   it("should resolve when the view is attached", function () {
-    let isAttached = sinon.stub().returns(true);
-    attaching.setIsAttached(isAttached);
-    attaching.register("mock-attacher", function () {});
+    attaching.register("mock-attacher", function () {
+      return {
+        attach: function () {
+        },
+        detach: function () {
+          return [];
+        }
+      };
+    });
     
     let result = { view: {} };
     attaching.attach(result).should.eventually.equal(result);
-    
-    isAttached.called.should.be.true;
   });
 });

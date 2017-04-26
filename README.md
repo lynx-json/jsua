@@ -62,8 +62,15 @@ The `attaching` object has the following interface:
 * `attach` - invokes the attacher functions in registry order until one returns a result
 
 The return parameter of an attacher function must be:
-  * falsey if the attacher did not attach the view to the view hierarchy
-  * an array if the attacher attached the view to the view hierarchy and, if the attacher detached any views from the view hierarchy, the array must contain references to the detached views
+* if the attacher cannot attach the view to the view hierarchy, the return parameter must be falsey
+* if the attacher can attach the view to the view hierarchy, the return parameter must be an object matching one of the following two interfaces:
+
+If the attacher determines that the view should be discarded:
+* `discard` - `true` if the attacher determines the view should be discarded
+
+If the attacher determines that the view should be attached:
+* `attach` - a parameterless function that attaches the view to the view hierarchy; the return parameter is `undefined`.
+* `detach` - a parameterless function that detaches any views from the view hierarchy in order to accommodate the view being attached; the return parameter is an array of the detached views — if no views were detached then the array must be empty.
 
 ## finishing
 

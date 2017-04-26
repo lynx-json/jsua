@@ -6,14 +6,32 @@ export function attach(result) {
   if (registrations.length === 0) return Promise.reject(new Error("No attachers have been registered."));
   
   return new Promise((resolve, reject) => {
-    var attached = registrations.some(registration => {
-      var detachedViews = registration.attacher(result);
-      return detachedViews;
-    });
+    var attachment = registrations.reduce((prev, registration) => {
+      if (prev) return prev;
+      
+      var attacherResult = registration.attacher(result);
+      if (!attacherResult) return;
+      
+      return {
+        registration,
+        result: attacherResult
+      };
+    }, null);
     
-    if (!attached) {
-      return reject(new Error("The view was unable to attach."));
+    if (!attachment) {
+      return reject(new Error("No attachment available for view."));
     }
+    
+    if (attachment.result.discard) {
+      var err = new Error("The view was discarded by '" + attachment.registration.name + "'.");
+      err.viewDiscarded = true;
+      return reject(err);
+    }
+    
+    attachment.result.attach();
+    attachment.result.detach().forEach(detachedView => {
+      console.log("View detached", detachedView);
+    });
     
     resolve(result);
   });
