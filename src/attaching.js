@@ -28,10 +28,13 @@ export function attach(result) {
       return reject(err);
     }
     
-    attachment.result.attach();
-    attachment.result.detach().forEach(detachedView => {
-      console.log("View detached", detachedView);
-    });
+    var detachedViews = attachment.result.attach();
+    
+    if (detachedViews) {
+      detachedViews.forEach(detachedView => {
+        console.log("View detached", detachedView);
+      });
+    }
     
     resolve(result);
   });

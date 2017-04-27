@@ -1,13 +1,9 @@
-function transfer(request) {
+export function transfer(request) {
   return fetch(request.url, request.options)
     .then(function (response) {
       return response.blob();
     }).then(function (blob) {
-      return {
-        url: request.url,
-        blob: blob
-      };
+      request.blob = blob;
+      return request;
     });
 }
-
-export { transfer };

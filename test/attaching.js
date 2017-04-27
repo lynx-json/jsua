@@ -44,11 +44,7 @@ describe("attaching", function () {
   it("should resolve when the view is attached", function () {
     attaching.register("mock-attacher", function () {
       return {
-        attach: function () {
-        },
-        detach: function () {
-          return [];
-        }
+        attach: function () {}
       };
     });
     

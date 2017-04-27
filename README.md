@@ -4,6 +4,10 @@
 
 A generic and embeddable user agent written in JavaScript.
 
+## data-jsua-app
+
+JSUA needs to know where its view hierarchy starts. To indicate the root view, add a `data-jsua-app` attribute to the root view and start JSUA by calling `fetch` and assigning `options.origin` to this view.
+
 ## fetch
 
 The `fetch` function has the same interface as the `fetch` function in the web browser's API. It's behavior is different, however. The `fetch` function will invoke `transferring.transfer`, `building.build`, `attaching.attach`, and `finishing.finish` for each call it receives.
@@ -21,6 +25,7 @@ The `transfer` function is used to retrieve resources and has a similar signatur
 
 * `url` - the URL of the targeted resource
 * `options` - an object containing transferring options
+  * `origin` - the view the user interacted with to initiate the fetch; if this is the first request, use the `data-jsua-app` view
   * `method` - the method of transferring
   * `headers` - headers to include in the transfer request
   * `body` - the body of the transfer request
@@ -31,6 +36,7 @@ The `transfer` function returns a Promise for an object, called a "content objec
 
 * `url` - the URL of the retrieved resource
 * `blob` - a Blob containing the content of the retrieved resource
+* `options` - the request options
 
 ## building
 
@@ -69,8 +75,7 @@ If the attacher determines that the view should be discarded:
 * `discard` - `true` if the attacher determines the view should be discarded
 
 If the attacher determines that the view should be attached:
-* `attach` - a parameterless function that attaches the view to the view hierarchy; the return parameter is `undefined`.
-* `detach` - a parameterless function that detaches any views from the view hierarchy in order to accommodate the view being attached; the return parameter is an array of the detached views — if no views were detached then the array must be empty.
+* `attach` - a parameterless function that attaches the view to the view hierarchy; the return parameter is an array of the detached views, if any, or falsey.
 
 ## finishing
 

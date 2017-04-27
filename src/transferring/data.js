@@ -1,4 +1,4 @@
-function transfer(request) {
+export function transfer(request) {
   var url = request.url.replace("data:", "");
   var delim = url.indexOf(",");
   var type, encoding;
@@ -23,11 +23,7 @@ function transfer(request) {
   }
 
   var data = new Buffer(content, encoding);
+  request.blob = new Blob([data], { type: type });
 
-  return Promise.resolve({
-    url: request.url,
-    blob: new Blob([data], { type: type })
-  });
+  return Promise.resolve(request);
 }
-
-export { transfer };
