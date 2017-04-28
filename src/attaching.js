@@ -32,12 +32,27 @@ export function attach(result) {
     
     if (detachedViews) {
       detachedViews.forEach(detachedView => {
-        console.log("View detached", detachedView);
+        raiseEvent(detachedView, "jsua-detach", false);
+        Array.from(detachedView.querySelectorAll("*")).forEach(detachedSubview => {
+          raiseEvent(detachedSubview, "jsua-detach", false);
+        });
       });
     }
     
+    Array.from(result.view.querySelectorAll("*")).forEach(attachedSubview => {
+      raiseEvent(attachedSubview, "jsua-attach", false);
+    });
+    
+    raiseEvent(result.view, "jsua-attach", true);
+    
     resolve(result);
   });
+}
+
+function raiseEvent(view, type, bubbles) {
+  var changeEvent = document.createEvent("Event");
+  changeEvent.initEvent(type, bubbles, false);
+  view.dispatchEvent(changeEvent);
 }
 
 export function register(name, attacher) {
