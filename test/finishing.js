@@ -36,7 +36,7 @@ describe("finishing", function () {
     }).to.not.throw(Error);
   });
   
-  it("should call finishers with result", function () {
+  it("should call finisher functions with result", function () {
     let result = { content: {}, view: {} };
     
     let finA = sinon.spy();
@@ -45,6 +45,23 @@ describe("finishing", function () {
     let finB = sinon.spy();
     finishing.register("finB", finB);
     
+    finishing.finish(result);
+    
+    finA.calledWith(result).should.be.true;
+    finB.calledWith(result).should.be.true;
+  });
+  
+  it("should call finisher arrays with result", function () {
+    let result = { content: {}, view: {} };
+    let finisher = [];
+    
+    let finA = sinon.spy();
+    finisher.push(finA);
+    
+    let finB = sinon.spy();
+    finisher.push(finB);
+    
+    finishing.register("finisher-array", finisher);
     finishing.finish(result);
     
     finA.calledWith(result).should.be.true;

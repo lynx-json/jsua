@@ -5,7 +5,13 @@ export function finish(result) {
   if (!result.view) throw new Error("'result' object must have 'view' property.");
   if (!result.content) throw new Error("'result' object must have 'content' property.");
   
-  registrations.forEach(registration => registration.finisher(result));
+  registrations.forEach(registration => {
+    if (typeof registration.finisher === "function") {
+      registration.finisher(result);
+    } else if (Array.isArray(registration.finisher)) {
+      registration.finisher.forEach(finisher => finisher(result));
+    }
+  });
   
   return result;
 }
