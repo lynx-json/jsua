@@ -1,4 +1,6 @@
 import * as urlModule from "url";
+import http from "./http";
+import data from "./data";
 
 export var registrations = [];
 
@@ -33,3 +35,5 @@ export function register(protocol, transferrer) {
     registrations.push(newRegistration);
   }
 }
+
+export { http, data };

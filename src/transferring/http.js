@@ -1,4 +1,4 @@
-export function transfer(request) {
+export default function transfer(request) {
   return fetch(request.url, request.options)
     .then(function (response) {
       return response.blob();

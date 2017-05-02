@@ -1,4 +1,4 @@
-export function transfer(request) {
+export default function transfer(request) {
   var url = request.url.replace("data:", "");
   var delim = url.indexOf(",");
   var type, encoding;

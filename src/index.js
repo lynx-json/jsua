@@ -2,8 +2,6 @@ import * as transferring from "./transferring";
 import * as building from "./building";
 import * as attaching from "./attaching";
 import * as finishing from "./finishing";
-import * as http from "./transferring/http";
-import * as data from "./transferring/data";
 
 function fetch(url, options) {
   return Promise.resolve({ url, options })
@@ -13,9 +11,9 @@ function fetch(url, options) {
     .then(finishing.finish);
 }
 
-transferring.register("https", http.transfer);
-transferring.register("http", http.transfer);
-transferring.register("data", data.transfer);
+transferring.register("https", transferring.http);
+transferring.register("http", transferring.http);
+transferring.register("data", transferring.data);
 
 export {
   fetch,
