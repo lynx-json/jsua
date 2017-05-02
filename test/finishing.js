@@ -1,4 +1,4 @@
-var finishing = require("../lib/finishing");
+var finishing = require("../dist/finishing");
 var chai = require("chai");
 var chaiAsPromised = require("chai-as-promised");
 var should = chai.should();

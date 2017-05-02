@@ -1,4 +1,4 @@
-var transferring = require("../../lib/transferring");
+var transferring = require("../../dist/transferring");
 var chai = require("chai");
 var chaiAsPromised = require("chai-as-promised");
 

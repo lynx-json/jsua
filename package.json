@@ -1,5 +1,5 @@
 {
-  "name": "jsua",
+  "name": "@lynx-json/jsua",
   "version": "0.1.4",
   "description": "A generic embeddable user agent written in JavaScript.",
   "main": "lib/index.js",
@@ -9,7 +9,8 @@
   "scripts": {
     "test": "mocha --recursive test",
     "pretest": "npm run build",
-    "build": "babel src -d lib"
+    "prepublish": "npm run build",
+    "build": "babel src -d dist"
   },
   "repository": {
     "type": "git",

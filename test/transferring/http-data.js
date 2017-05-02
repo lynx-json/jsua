@@ -1,5 +1,5 @@
-var http = require("../../lib/transferring/http").default;
-var data = require("../../lib/transferring/data").default;
+var http = require("../../dist/transferring/http").default;
+var data = require("../../dist/transferring/data").default;
 var chai = require("chai");
 var should = chai.should();
 
