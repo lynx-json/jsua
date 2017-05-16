@@ -45,13 +45,6 @@ export function attach(result) {
     
     raiseEvent(result.view, "jsua-attach", true);
     
-    Array.from(result.view.querySelectorAll("[data-jsua-focus=true]")).forEach( (focusedView, idx) => {
-      focusedView.removeAttribute("data-jsua-focus");
-      if (idx !== 0) return;
-      document.body.scrollTop = focusedView.offsetHeight;
-      focusedView.focus();
-    });
-    
     resolve(result);
   });
 }

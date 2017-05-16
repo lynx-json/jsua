@@ -13,6 +13,16 @@ export function finish(result) {
     }
   });
   
+  var focusedViews = Array.from(result.view.querySelectorAll("[data-jsua-focus=true]"));
+  if (result.view.matches("[data-jsua-focus=true]")) focusedViews.unshift(result.view);
+  
+  focusedViews.forEach( (focusedView, idx) => {
+    focusedView.removeAttribute("data-jsua-focus");
+    if (idx !== 0) return;
+    document.body.scrollTop = focusedView.offsetHeight;
+    focusedView.focus();
+  });
+  
   return result;
 }
 
