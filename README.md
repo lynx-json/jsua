@@ -4,9 +4,9 @@
 
 A generic and embeddable user agent written in JavaScript.
 
-## data-jsua-app
+## data-jsua-context
 
-JSUA needs to know where its view hierarchy starts. To indicate the root view, add a `data-jsua-app` attribute to the root view and start JSUA by calling `fetch` and assigning `options.origin` to this view.
+The `data-jsua-context` attribute can be applied to any view to identify share view/presentation context information. The value of this property MUST be a space-delimited token list. This attribute is not required on all views with one exception. JSUA needs to know where the view hierarchy for the application begins. To indicate the root view for the application, add a `data-jsua-context` attribute to the root view containing the token `app`. To start JSUA, call `fetch` and assign `options.origin` a reference to this root view.
 
 ## fetch
 
@@ -25,7 +25,7 @@ The `transfer` function is used to retrieve resources and has a similar signatur
 
 * `url` - the URL of the targeted resource
 * `options` - an object containing transferring options
-  * `origin` - the view the user interacted with to initiate the fetch; if this is the first request, use the `data-jsua-app` view
+  * `origin` - the view the user interacted with to initiate the fetch; if this is the first request, use the `[data-jsua-context~=app]` view
   * `method` - the method of transferring
   * `headers` - headers to include in the transfer request
   * `body` - the body of the transfer request
