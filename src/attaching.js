@@ -32,24 +32,24 @@ export function attach(result) {
     
     if (detachedViews) {
       detachedViews.forEach(detachedView => {
-        raiseEvent(detachedView, "jsua-detach", false);
+        exports.raiseAttachDetachEvent(detachedView, "jsua-detach", false);
         Array.from(detachedView.querySelectorAll("*")).forEach(detachedSubview => {
-          raiseEvent(detachedSubview, "jsua-detach", false);
+          exports.raiseAttachDetachEvent(detachedSubview, "jsua-detach", false);
         });
       });
     }
     
     Array.from(result.view.querySelectorAll("*")).forEach(attachedSubview => {
-      raiseEvent(attachedSubview, "jsua-attach", false);
+      exports.raiseAttachDetachEvent(attachedSubview, "jsua-attach", false);
     });
     
-    raiseEvent(result.view, "jsua-attach", true);
+    exports.raiseAttachDetachEvent(result.view, "jsua-attach", true);
     
     resolve(result);
   });
 }
 
-function raiseEvent(view, type, bubbles) {
+export function raiseAttachDetachEvent(view, type, bubbles) {
   var changeEvent = document.createEvent("Event");
   changeEvent.initEvent(type, bubbles, false);
   view.dispatchEvent(changeEvent);

@@ -85,5 +85,6 @@ The `finishing` object has the following interface:
 * `register` - registers a finisher function; accepts the following params:
   * `name` - a distinguishing name for the finisher
   * `finisher` - the function that finishes the view; accepts a build result param
+  * `condition` - a function that returns `false` if the finisher should not be executed; accepts a build result param; this param is optional
 * `registrations` - the registered finisher functions
 * `finish` - invokes the finisher functions in registry order

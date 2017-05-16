@@ -6,6 +6,8 @@ export function finish(result) {
   if (!result.content) throw new Error("'result' object must have 'content' property.");
   
   registrations.forEach(registration => {
+    if (registration.condition && registration.condition(result) === false) return;
+    
     if (typeof registration.finisher === "function") {
       registration.finisher(result);
     } else if (Array.isArray(registration.finisher)) {
@@ -26,11 +28,13 @@ export function finish(result) {
   return result;
 }
 
-export function register(name, finisher) {
+export function register(name, finisher, condition) {
   if (!name) throw new Error("'name' param is required.");
   if (!finisher) throw new Error("'finisher' param is required.");
+  if (condition && typeof condition !== "function") throw new Error("'condition' param must be a function.");
   
-  var newRegistration = { name, finisher };
+  condition = condition || null;
+  var newRegistration = { name, finisher, condition };
   var oldRegistration = registrations.find(registration => registration.name === name);
   
   if (oldRegistration) {
