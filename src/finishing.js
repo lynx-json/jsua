@@ -1,5 +1,4 @@
 export var registrations = [];
-import { getElementCoordinates } from "./util";
 
 export function finish(result) {
   if (!result) throw new Error("'result' param is required.");
@@ -22,9 +21,13 @@ export function finish(result) {
   focusedViews.forEach((focusedView, idx) => {
     focusedView.removeAttribute("data-jsua-focus");
     if (idx !== 0) return;
-    let top = getElementCoordinates(focusedView).top;
-    document.body.scrollTop = top;
-    focusedView.focus();
+    if (focusedView.hasAttribute("tabindex") === false) {
+      focusedView.setAttribute("tabindex", -1);
+      focusedView.focus();
+      focusedView.removeAttribute("tabindex");
+    } else {
+      focusedView.focus();
+    }
   });
 
   return result;

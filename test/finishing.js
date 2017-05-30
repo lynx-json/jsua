@@ -1,5 +1,4 @@
 var finishing = require("../dist/finishing");
-var util = require("../dist/util");
 var chai = require("chai");
 var chaiAsPromised = require("chai-as-promised");
 var should = chai.should();
@@ -161,8 +160,6 @@ describe("finishing", function () {
         content: {}
       };
 
-      getElementCoordinatesStub = sinon.stub(util, "getElementCoordinates");
-
       focusableOne = document.createElement("div");
       focusableOne.setAttribute("data-jsua-focus", true);
       result.view.appendChild(focusableOne);
@@ -172,31 +169,10 @@ describe("finishing", function () {
       focusableTwo.setAttribute("data-jsua-focus", true);
       result.view.appendChild(focusableTwo);
       sinon.spy(focusableTwo, "focus");
-
-      getElementCoordinatesStub.returns({
-        top: 0
-      });
     });
 
-    afterEach(function () {
-      getElementCoordinatesStub.restore();
-    });
-
-    it("should scroll to the top of the first focus element", function () {
-      getElementCoordinatesStub.onCall(0).returns({
-        top: 100
-      });
-
-      getElementCoordinatesStub.onCall(1).returns({
-        top: 200
-      });
-
-      finishing.finish(result);
-
-      document.body.scrollTop.should.equal(100);
-    });
-
-    it("should focus on the first focus element", function () {
+    it("should focus on the first focus element", function (done) {
+      focusableOne.addEventListener("focus", () => done());
       finishing.finish(result);
 
       focusableOne.focus.called.should.be.true;
