@@ -21,13 +21,11 @@ export function finish(result) {
   focusedViews.forEach((focusedView, idx) => {
     focusedView.removeAttribute("data-jsua-focus");
     if (idx !== 0) return;
-    if (focusedView.hasAttribute("tabindex") === false) {
-      focusedView.setAttribute("tabindex", -1);
-      focusedView.focus();
-      focusedView.removeAttribute("tabindex");
-    } else {
-      focusedView.focus();
-    }
+
+    let addTabIndex = !focusedView.hasAttribute("tabindex");
+    if (addTabIndex) focusedView.setAttribute("tabindex", -1);
+    focusedView.focus();
+    if (addTabIndex) focusedView.removeAttribute("tabindex");
   });
 
   return result;
