@@ -24,7 +24,11 @@ export function finish(result) {
 
     let addTabIndex = !focusedView.hasAttribute("tabindex");
     if (addTabIndex) focusedView.setAttribute("tabindex", -1);
-    focusedView.focus();
+    if (focusedView.setActive) {
+      focusedView.setActive();
+    } else {
+      focusedView.focus();
+    }
     if (addTabIndex) focusedView.removeAttribute("tabindex");
   });
 
