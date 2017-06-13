@@ -1,7 +1,7 @@
 import * as urlModule from "url";
 import http from "./http";
 import data from "./data";
-
+var pendingTransfers = 0;
 export var registrations = [];
 
 export function transfer(request) {
@@ -19,7 +19,49 @@ export function transfer(request) {
   var registration = registrations.find(registration => registration.protocol === protocol);
   if (!registration) return Promise.reject(new Error("No transferrer registered for protocol: " + protocol));
 
-  return registration.transferrer(request);
+  var appView = exports.findAppView(request.options.origin);
+  exports.raiseTransferringStartedEvent(appView, request.options.origin);
+
+  return registration.transferrer(request)
+    .then(function (result) {
+      exports.raiseTransferringEndedEvent(appView, request.options.origin);
+      return result;
+    })
+    .catch(function (err) {
+      exports.raiseTransferringEndedEvent(appView, request.options.origin);
+      throw err;
+    });
+}
+
+export function findAppView(originView) {
+  if (!originView) return;
+  if (originView.matches("[data-jsua-context~=app]")) return originView;
+  
+  var currentView = originView.parentElement;
+  
+  do {
+    if (currentView.matches("[data-jsua-context~=app]")) return currentView;
+    currentView = currentView.parentElement;
+  } while (currentView && currentView !== document);
+}
+
+export function raiseTransferringStartedEvent(appView, originView) {
+  pendingTransfers = pendingTransfers + 1;
+  raiseTransferringEvent(appView, originView, "jsua-transferring-started");
+}
+
+export function raiseTransferringEndedEvent(appView, originView) {
+  pendingTransfers = pendingTransfers - 1;
+  raiseTransferringEvent(appView, originView, "jsua-transferring-ended");
+}
+
+function raiseTransferringEvent(appView, originView, type) {
+  if (!appView) return;
+  var transferringEvent = document.createEvent("Event");
+  transferringEvent.initEvent(type, true, false);
+  transferringEvent.originView = originView;
+  transferringEvent.pendingTransfers = pendingTransfers;
+  appView.dispatchEvent(transferringEvent);
 }
 
 export function register(protocol, transferrer) {

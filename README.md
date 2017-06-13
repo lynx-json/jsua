@@ -38,6 +38,8 @@ The `transfer` function returns a Promise for an object, called a "content objec
 * `blob` - a Blob containing the content of the retrieved resource
 * `options` - the request options
 
+TODO: document `jsua-transferring-started` and `jsua-transferring-ended` events
+
 ## building
 
 The `building` object has the following interface:
@@ -77,7 +79,7 @@ If the attacher determines that the view should be discarded:
 If the attacher determines that the view should be attached:
 * `attach` - a parameterless function that attaches the view to the view hierarchy; the return parameter is an array of the detached views, if any, or falsey.
 
-TODO: document `jsua-attach` and `jsua-detach` events after proving them out.
+TODO: document `jsua-attach` and `jsua-detach` events
 
 ## finishing
 
