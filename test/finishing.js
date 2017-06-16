@@ -19,6 +19,11 @@ function createView() {
 }
 
 describe("finishing", function () {
+  beforeEach(function () {
+    // clear all registrations before each test
+    finishing.registrations.splice(0, finishing.registrations.length);  
+  });
+  
   it("should throw when no params", function () {
     expect(function () {
       finishing.finish();
@@ -61,6 +66,20 @@ describe("finishing", function () {
     finishing.finish(result);
 
     finA.calledWith(result).should.be.true;
+    finB.calledWith(result).should.be.true;
+  });
+  
+  it("should call finisher functions despite error", function () {
+    let result = { content: {}, view: createView() };
+
+    let finA = function () { throw new Error("Error in finA."); };
+    finishing.register("finA", finA);
+
+    let finB = sinon.spy();
+    finishing.register("finB", finB);
+
+    finishing.finish(result);
+
     finB.calledWith(result).should.be.true;
   });
 

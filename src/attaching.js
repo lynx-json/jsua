@@ -24,7 +24,7 @@ export function attach(result) {
     
     if (attachment.result.discard) {
       var err = new Error("The view was discarded by '" + attachment.registration.name + "'.");
-      err.viewDiscarded = true;
+      err.name = "ViewDiscardedError";
       return reject(err);
     }
     
