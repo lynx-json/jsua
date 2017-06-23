@@ -20,6 +20,8 @@ The transferring object has the following interface:
   * `transferrer` - the function that performs the transfer; accepts a `request` object param
 * `registrations` - the registered transfer functions
 * `transfer` - resolves the transferrer by protocol and invokes it
+* `addEventListener` - add a `start`, `end`, or `error` event listener
+* `removeEventListener` - remove a `start`, `end`, or `error` event listener
 
 The `transfer` function is used to retrieve resources and has a similar signature to the HTML Fetch API, with the exception that the parameters are combined into a single `request` object:
 
@@ -32,13 +34,19 @@ The `transfer` function is used to retrieve resources and has a similar signatur
 
 The `transfer` function will delegate the call to a registered transfer function for the protocol scheme of the `url`. To register a transfer function for a given protocol, call the `register` function of the `transfer` function (e.g. `transfer.register("http", anHttpTransferFunction)`).
 
-The `transfer` function returns a Promise for an object, called a "content object", having the following properties:
+The `transfer` function returns a Promise for an object having the following properties:
 
 * `url` - the URL of the retrieved resource
-* `blob` - a Blob containing the content of the retrieved resource
 * `options` - the request options
+* `blob` - a Blob containing the content of the retrieved resource
 
-TODO: document `jsua-transferring-started` and `jsua-transferring-ended` events
+The event object passed to the `start`, `end`, and `error` transferring event listeners will have the following properties:
+
+* `request` - the request object
+* `result` - the transfer result (on `end`)
+* `error` - the transfer error (on `error`)
+* `pendingTransfers` - the count of pending transfers including this request (on `start`) or the count of pending transfers not including this result/error (on `end` and `error`)
+  
 
 ## building
 

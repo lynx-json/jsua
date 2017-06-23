@@ -55,8 +55,11 @@ describe("transferring", function () {
     transferring.transfer({ url: "foo://" }).should.eventually.equal(expected);
   });
   
-  it("should raise 'jsua-transferring-started' event on the app view before starting a transfer");
-  it("should raise 'jsua-transferring-ended' event on the app view after a transfer has ended");
+  it("should raise 'start' event before starting a transfer");
+  it("should raise 'end' event after a transfer has ended successfully");
+  it("should raise 'error' event after a transfer has ended with an error");
+  it("should assign 'request' to all events");
   it("should assign 'pendingTransfers' to all events reporting total pending transfer count");
-  it("should assign 'originView' to the view that originated the transfer");
+  it("should assign 'result' to all 'end' events");
+  it("should assign 'error' to all 'error' events");
 });

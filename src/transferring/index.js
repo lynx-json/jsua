@@ -1,8 +1,28 @@
 import * as urlModule from "url";
 import http from "./http";
 import data from "./data";
+import { EventEmitter } from "events";
+
 var pendingTransfers = 0;
+var eventHub = new EventEmitter();
+
+function incrementPendingTransfers() {
+  return ++pendingTransfers;
+}
+
+function decrementPendingTransfers() {
+  return --pendingTransfers;
+}
+
 export var registrations = [];
+
+export function addEventListener(eventName, listener) {
+  eventHub.addListener(eventName, listener);  
+}
+
+export function removeEventListener(eventName, listener) {
+  eventHub.removeListener(eventName, listener);
+}
 
 export function transfer(request) {
   if (!request) return Promise.reject(new Error("'request' param is required."));
@@ -19,49 +39,52 @@ export function transfer(request) {
   var registration = registrations.find(registration => registration.protocol === protocol);
   if (!registration) return Promise.reject(new Error("No transferrer registered for protocol: " + protocol));
 
-  var appView = exports.findAppView(request.options.origin);
-  exports.raiseTransferringStartedEvent(appView, request.options.origin);
+  exports.raiseTransferringStartedEvent(request);
 
   return registration.transferrer(request)
     .then(function (result) {
-      exports.raiseTransferringEndedEvent(appView, request.options.origin);
+      exports.raiseTransferringEndedEvent(request, result);
       return result;
     })
     .catch(function (err) {
-      exports.raiseTransferringEndedEvent(appView, request.options.origin);
+      exports.raiseTransferringErrorEvent(request, err);
       throw err;
     });
 }
 
-export function findAppView(originView) {
-  if (!originView) return;
-  if (originView.matches("[data-jsua-context~=app]")) return originView;
+export function raiseTransferringStartedEvent(request) {
+  var countOfPendingTransfers = incrementPendingTransfers();
   
-  var currentView = originView.parentElement;
+  var eventObj = {
+    request: request,
+    pendingTransfers: countOfPendingTransfers
+  };
   
-  do {
-    if (currentView.matches("[data-jsua-context~=app]")) return currentView;
-    currentView = currentView.parentElement;
-  } while (currentView && currentView !== document);
+  eventHub.emit("start", eventObj);
 }
 
-export function raiseTransferringStartedEvent(appView, originView) {
-  pendingTransfers = pendingTransfers + 1;
-  raiseTransferringEvent(appView, originView, "jsua-transferring-started");
+export function raiseTransferringEndedEvent(request, result) {
+  var countOfPendingTransfers = decrementPendingTransfers();
+  
+  var eventObj = {
+    request: request,
+    pendingTransfers: countOfPendingTransfers,
+    result: result
+  };
+  
+  eventHub.emit("end", eventObj);
 }
 
-export function raiseTransferringEndedEvent(appView, originView) {
-  pendingTransfers = pendingTransfers - 1;
-  raiseTransferringEvent(appView, originView, "jsua-transferring-ended");
-}
-
-function raiseTransferringEvent(appView, originView, type) {
-  if (!appView) return;
-  var transferringEvent = document.createEvent("Event");
-  transferringEvent.initEvent(type, true, false);
-  transferringEvent.originView = originView;
-  transferringEvent.pendingTransfers = pendingTransfers;
-  appView.dispatchEvent(transferringEvent);
+export function raiseTransferringErrorEvent(request, err) {
+  var countOfPendingTransfers = decrementPendingTransfers();
+  
+  var eventObj = {
+    request: request,
+    pendingTransfers: countOfPendingTransfers,
+    error: err
+  };
+  
+  eventHub.emit("error", eventObj);
 }
 
 export function register(protocol, transferrer) {
