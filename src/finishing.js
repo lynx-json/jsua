@@ -51,11 +51,15 @@ export function tryToSetFocus(result) {
 
     let addTabIndex = !focusedView.hasAttribute("tabindex");
     if (addTabIndex) focusedView.setAttribute("tabindex", -1);
+    
     if (focusedView.setActive) {
       focusedView.setActive();
     } else {
       focusedView.focus();
     }
+    
+    window.scroll(0, focusedView.offsetTop - (window.screen.height / 2));
+    
     if (addTabIndex) focusedView.removeAttribute("tabindex");
   });
 }

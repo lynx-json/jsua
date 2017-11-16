@@ -8,6 +8,10 @@ A generic and embeddable user agent written in JavaScript.
 
 The `data-jsua-context` attribute can be applied to any view to identify share view/presentation context information. The value of this property MUST be a space-delimited token list. This attribute is not required on all views with one exception. JSUA needs to know where the view hierarchy for the application begins. To indicate the root view for the application, add a `data-jsua-context` attribute to the root view containing the token `app`. To start JSUA, call `fetch` and assign `options.origin` a reference to this root view.
 
+## data-jsua-view-uri
+
+The `data-jsua-view-uri` attribute can be applied to any view to identify the view to JSUA in a uniform way. If applied, the value should be the view's context URI plus an additional fragment component to identify the view within the context document. If JSUA receives a fetch request for a URL with a fragment component that is a same-document reference, JSUA will attempt to find the targeted view by its `data-jsua-view-uri` attribute and focus it instead of performing a transfer.
+
 ## fetch
 
 The `fetch` function has the same interface as the `fetch` function in the web browser's API. It's behavior is different, however. The `fetch` function will invoke `transferring.transfer`, `building.build`, `attaching.attach`, and `finishing.finish` for each call it receives.
@@ -67,6 +71,11 @@ The `build` function returns a Promise for an object, called a "build result", h
 
 * `content` - the content object that was passed into builder
 * `view` - an unattached view of the content
+
+A builder function should set the following attributes on the resultant view:
+
+* `data-content-url` - the context URI of the content in the view
+* `data-content-type` - the media type of the content in the view
 
 ## attaching
 
