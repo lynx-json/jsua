@@ -58,8 +58,6 @@ export function tryToSetFocus(result) {
       focusedView.focus();
     }
     
-    window.scroll(0, focusedView.offsetTop - (window.screen.height / 2));
-    
     if (addTabIndex) focusedView.removeAttribute("tabindex");
   });
 }
