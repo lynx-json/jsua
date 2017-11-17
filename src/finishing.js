@@ -48,17 +48,8 @@ export function tryToSetFocus(result) {
   focusedViews.forEach((focusedView, idx) => {
     focusedView.removeAttribute("data-jsua-focus");
     if (idx !== 0) return;
-
-    let addTabIndex = !focusedView.hasAttribute("tabindex");
-    if (addTabIndex) focusedView.setAttribute("tabindex", -1);
-    
-    if (focusedView.setActive) {
-      focusedView.setActive();
-    } else {
-      focusedView.focus();
-    }
-    
-    if (addTabIndex) focusedView.removeAttribute("tabindex");
+    focusedView.scrollIntoView();
+    focusedView.focus();
   });
 }
 
