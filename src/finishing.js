@@ -6,7 +6,7 @@ export function register(name, finisher, condition) {
   if (typeof finisher !== "function" && Array.isArray(finisher) === false) throw new Error("'finisher' param must be a function or array.");
   if (condition && typeof condition !== "function") throw new Error("'condition' param must be a function.");
 
-  if (typeof finisher === "function") finisher = [ finisher ];
+  if (typeof finisher === "function") finisher = [finisher];
   condition = condition || null;
   var newRegistration = { name, finisher, condition };
   var oldRegistration = registrations.find(registration => registration.name === name);
@@ -49,16 +49,8 @@ export function tryToSetFocus(result) {
     focusedView.removeAttribute("data-jsua-focus");
     if (idx !== 0) return;
 
-    let addTabIndex = !focusedView.hasAttribute("tabindex");
-    if (addTabIndex) focusedView.setAttribute("tabindex", -1);
-    
-    if (focusedView.setActive) {
-      focusedView.setActive();
-    } else {
-      focusedView.focus();
-    }
-    
-    if (addTabIndex) focusedView.removeAttribute("tabindex");
+    focusedView.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+    focusedView.focus();
   });
 }
 
