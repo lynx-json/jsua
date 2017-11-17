@@ -12,7 +12,7 @@ function fetch(url, options) {
     var sameDocumentReferenceView = findSameDocumentReferenceView(appView, urlObj, options);
     if (sameDocumentReferenceView) {
       if (sameDocumentReferenceView === appView) {
-        window.scroll(0, 0);
+        scrollAppViewToTop(appView);
       } else {
         sameDocumentReferenceView.setAttribute("data-jsua-focus", true);
         finishing.tryToSetFocus({ view: sameDocumentReferenceView });
@@ -54,6 +54,15 @@ function variesByFragmentOnly(urlObj) {
 function findSameDocumentReferenceView(appView, urlObj, options) {
   if (urlObj.hash === "#") return appView;
   return appView.querySelector("[data-jsua-view-uri='" + urlObj.href + "']");
+}
+
+function scrollAppViewToTop(appView) {
+  var firstScrollableView = Array.from(appView.querySelectorAll("*"))
+    .find(el => el.style.overflowY === "scroll");
+    
+  if (firstScrollableView) {
+    firstScrollableView.scrollTop = 0;
+  }
 }
 
 function findAppViewFor(view) {
