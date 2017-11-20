@@ -77,9 +77,8 @@ describe("finishing", function () {
 
     let finB = sinon.spy();
     finishing.register("finB", finB);
-
+    
     finishing.finish(result);
-
     finB.calledWith(result).should.be.true;
   });
 
@@ -183,20 +182,26 @@ describe("finishing", function () {
       focusableOne.setAttribute("data-jsua-focus", true);
       result.view.appendChild(focusableOne);
       sinon.spy(focusableOne, "focus");
+      focusableOne.scrollIntoView = sinon.stub();
 
       focusableTwo = document.createElement("div");
       focusableTwo.setAttribute("data-jsua-focus", true);
       result.view.appendChild(focusableTwo);
       sinon.spy(focusableTwo, "focus");
+      focusableTwo.scrollIntoView = sinon.stub();
     });
 
-    it("should focus on the first focus element", function (done) {
-      focusableOne.addEventListener("focus", () => done());
-      finishing.finish(result);
+    it("should focus on the first focus element", function () {      
+      function verifySpies() {
+        focusableOne.focus.called.should.be.true;
+        focusableOne.scrollIntoView.called.should.be.true;
+        focusableTwo.focus.called.should.be.false;
+        focusableTwo.scrollIntoView.called.should.be.false;  
+      }
 
-      focusableOne.focus.called.should.be.true;
-      focusableTwo.focus.called.should.be.false;
+      return Promise.resolve(result)
+        .then(finishing.finish)
+        .then(verifySpies, verifySpies);
     });
-
   });
 });

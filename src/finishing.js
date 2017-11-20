@@ -53,5 +53,3 @@ export function tryToSetFocus(result) {
     focusedView.focus();
   });
 }
-
-export var platform;
