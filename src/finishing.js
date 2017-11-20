@@ -48,8 +48,11 @@ export function tryToSetFocus(result) {
   focusedViews.forEach((focusedView, idx) => {
     focusedView.removeAttribute("data-jsua-focus");
     if (idx !== 0) return;
-
-    focusedView.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
-    focusedView.focus();
+    exports.setFocus(focusedView);
   });
+}
+
+export function setFocus(view) {
+  view.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+  view.focus();
 }
