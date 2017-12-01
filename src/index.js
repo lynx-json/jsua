@@ -5,6 +5,7 @@ import * as finishing from "./finishing";
 import urlModule from "url";
 
 function fetch(url, options) {
+  options = options || {};
   var appView = findAppViewFor(options.origin);
   var urlObj = urlModule.parse(url);
   
