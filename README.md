@@ -16,6 +16,40 @@ The `data-jsua-view-uri` attribute can be applied to any view to identify the vi
 
 The `fetch` function has the same interface as the `fetch` function in the web browser's API. It's behavior is different, however. The `fetch` function will invoke `transferring.transfer`, `building.build`, `attaching.attach`, and `finishing.finish` for each call it receives.
 
+## media
+
+The `media` object has the following interface:
+* `register` - registers media; accepts the following params:
+  * `media` - a URL identifying the media (string)
+  * `supports` - an optional function that accepts a `source` object parameter and returns `true` if the media supports the source or `false` if not (function)
+* `registrations` - the registered media (array)
+* `supports` - returns `true` if a media is registered that supports the source or `false` if not (function)
+
+To register media, call the `register` function:
+
+* `media.register("http://www.example.com/my-media");`
+* `media.register("http://www.example.com/my-media", function (source) { return isThisSourceSupportedOnThisPlatform(source); });`
+
+To test whether a source is supported:
+
+* `var isSupported = media.supports({ media: "http://www.example.com/my-media" });`
+
+The `source` param of the `supports` function is an object with the following interface:
+
+* `media` - the target media for the content (string) - if empty or undefined, its value is presumed to be `screen`
+* one of the following sets of content properties:
+  * `src` - the URL of the content (string)
+  * `type` - optional informative, but not authoritative, media type of the content (string)
+  * -- or --
+  * `data` - the content (string)
+  * `type` - the authoritative media type of the content (string)
+  * `encoding` - a value of `base64` or `utf-8` (the presumed value, if a value is not present) to indicate the encoding of the content in the `data` property (string)
+* also, image content (image/*) may includes the following properties:
+  * `width` - the natural width of the image
+  * `height` - the natural height of the image
+  * `scale` - the scale of the image which can be correlated to a screen's pixel density - for example, a screen with a pixel density of 2 (2 device pixels per pixel) would support an image with a scale of 2.
+* also, sources may include any additional extended properties specific to the content.
+
 ## transferring
 
 The transferring object has the following interface:

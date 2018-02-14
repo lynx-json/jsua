@@ -1,3 +1,4 @@
+import * as media from "./media";
 import * as transferring from "./transferring";
 import * as building from "./building";
 import * as attaching from "./attaching";
@@ -83,6 +84,7 @@ transferring.register("http", transferring.http);
 transferring.register("data", transferring.data);
 
 export {
+  media,
   fetch,
   transferring,
   building,
