@@ -16,6 +16,10 @@ The `data-jsua-view-uri` attribute can be applied to any view to identify the vi
 
 The `fetch` function has the same interface as the `fetch` function in the web browser's API. It's behavior is different, however. The `fetch` function will invoke `transferring.transfer`, `building.build`, `attaching.attach`, and `finishing.finish` for each call it receives.
 
+Beyond the web browser's API, the `options` parameter of the `fetch` function supports the following additional properties:
+
+* `base` - a base URI from the encapsulating representation
+
 ## media
 
 The `media` object has the following interface:
@@ -69,6 +73,7 @@ The `transfer` function is used to retrieve resources and has a similar signatur
   * `method` - the method of transferring
   * `headers` - headers to include in the transfer request
   * `body` - the body of the transfer request
+  * `base` - a base URI from the encapsulating representation
 
 The `transfer` function will delegate the call to a registered transfer function for the protocol scheme of the `url`. To register a transfer function for a given protocol, call the `register` function of the `transfer` function (e.g. `transfer.register("http", anHttpTransferFunction)`).
 
