@@ -1,6 +1,6 @@
 {
   "name": "@lynx-json/jsua",
-  "version": "0.2.13",
+  "version": "0.2.14",
   "description": "A generic embeddable user agent written in JavaScript.",
   "main": "dist/index.js",
   "directories": {
