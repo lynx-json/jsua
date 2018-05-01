@@ -42,7 +42,7 @@ describe("media / register", function () {
   });
 });
 
-describe.only("media / supports", function () {
+describe("media / supports", function () {
   it("should throw when no params", function () {
     expect(function () {
       media.supports();
