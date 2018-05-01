@@ -34,6 +34,11 @@ export function register(mediaType, builder) {
     registrations.push(newRegistration);
   }
   
-  var sorted = registrations.sort((x,y) => x.predicate.specificity < y.predicate.specificity);
+  var sorted = registrations.sort((x,y) => {
+    if (x.predicate.specificity < y.predicate.specificity) return 1;
+    if (x.predicate.specificity > y.predicate.specificity) return -1;
+    return 0;
+  });
+  
   Array.prototype.splice.call(registrations, [0, registrations.length], sorted);
 }

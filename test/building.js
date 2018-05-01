@@ -53,9 +53,9 @@ describe("building", function () {
   });
   
   it("should sort registrations by media type range specificity", function () {
-    building.register("*/*", function (content) {});
-    building.register("text/plain", function (content) {});
-    building.register("text/*", function (content) {});
+    building.register("*/*", function () {});
+    building.register("text/plain", function () {});
+    building.register("text/*", function () {});
     building.registrations[0].mediaType.should.equal("text/plain");
     building.registrations[1].mediaType.should.equal("text/*");
     building.registrations[2].mediaType.should.equal("*/*");
