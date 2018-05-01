@@ -1,6 +1,7 @@
 var building = require("../dist/building");
 var chai = require("chai");
 var chaiAsPromised = require("chai-as-promised");
+var expect = chai.expect;
 
 chai.use(chaiAsPromised);
 var should = chai.should();
@@ -56,8 +57,23 @@ describe("building", function () {
     building.register("*/*", function () {});
     building.register("text/plain", function () {});
     building.register("text/*", function () {});
-    building.registrations[0].mediaType.should.equal("text/plain");
-    building.registrations[1].mediaType.should.equal("text/*");
-    building.registrations[2].mediaType.should.equal("*/*");
+    building.register("text/html", function () {});
+    
+    function differenceOfIndicies(x, y) {
+      x = building.registrations.find(r => r.mediaType === x);
+      y = building.registrations.find(r => r.mediaType === y);
+      
+      x = building.registrations.indexOf(x);
+      y = building.registrations.indexOf(y);
+      
+      return x - y;
+    }
+    
+    expect(differenceOfIndicies("text/plain", "text/*") < 0).to.be.true;
+    expect(differenceOfIndicies("text/html", "text/*") < 0).to.be.true;
+    expect(differenceOfIndicies("text/plain", "*/*") < 0).to.be.true;
+    expect(differenceOfIndicies("text/html", "*/*") < 0).to.be.true;
+    expect(differenceOfIndicies("text/*", "*/*") < 0).to.be.true;
+    expect(differenceOfIndicies("text/*", "*/*") < 0).to.be.true;
   });
 });
