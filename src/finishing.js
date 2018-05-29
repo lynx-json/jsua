@@ -53,6 +53,15 @@ export function tryToSetFocus(result) {
 }
 
 export function setFocus(view) {
-  view.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+  if (!exports.isDisplayed(view)) view.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
   view.focus();
+}
+
+export function isDisplayed(view) {
+  if (!view) return false;
+  var rect = view.getBoundingClientRect();
+  return rect.left >= 0 &&
+    rect.left <= document.documentElement.clientWidth &&
+    rect.top >= 0 &&
+    rect.top <= document.documentElement.clientHeight;
 }
