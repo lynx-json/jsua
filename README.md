@@ -8,6 +8,10 @@ A generic and embeddable user agent written in JavaScript.
 
 The `data-jsua-context` attribute can be applied to any view to identify share view/presentation context information. The value of this property MUST be a space-delimited token list. This attribute is not required on all views with one exception. JSUA needs to know where the view hierarchy for the application begins. To indicate the root view for the application, add a `data-jsua-context` attribute to the root view containing the token `app`. To start JSUA, call `fetch` and assign `options.origin` a reference to this root view.
 
+## data-jsua-focus
+
+The `data-jsua-focus` attribute can be applied to any view during finishing to ask JSUA to give the view focus. If the view is not displayed, JSUA will attempt scroll it into view.
+
 ## data-jsua-view-uri
 
 The `data-jsua-view-uri` attribute can be applied to any view to identify the view to JSUA in a uniform way. If applied, the value should be the view's context URI plus an additional fragment component to identify the view within the context document. If JSUA receives a fetch request for a URL with a fragment component that is a same-document reference, JSUA will attempt to find the targeted view by its `data-jsua-view-uri` attribute and focus it instead of performing a transfer.
@@ -48,7 +52,7 @@ The `source` param of the `supports` function is an object with the following in
   * `data` - the content (string)
   * `type` - the authoritative media type of the content (string)
   * `encoding` - a value of `base64` or `utf-8` (the presumed value, if a value is not present) to indicate the encoding of the content in the `data` property (string)
-* also, image content (image/*) may includes the following properties:
+* also, image content (`image/*`) may includes the following properties:
   * `width` - the natural width of the image
   * `height` - the natural height of the image
   * `scale` - the scale of the image which can be correlated to a screen's pixel density - for example, a screen with a pixel density of 2 (2 device pixels per pixel) would support an image with a scale of 2.
@@ -89,7 +93,7 @@ The event object passed to the `start`, `end`, and `error` transferring event li
 * `result` - the transfer result (on `end`)
 * `error` - the transfer error (on `error`)
 * `pendingTransfers` - the count of pending transfers including this request (on `start`) or the count of pending transfers not including this result/error (on `end` and `error`)
-  
+
 
 ## building
 
