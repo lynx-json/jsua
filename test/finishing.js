@@ -21,9 +21,9 @@ function createView() {
 describe("finishing", function () {
   beforeEach(function () {
     // clear all registrations before each test
-    finishing.registrations.splice(0, finishing.registrations.length);  
+    finishing.registrations.splice(0, finishing.registrations.length);
   });
-  
+
   it("should throw when no params", function () {
     expect(function () {
       finishing.finish();
@@ -68,7 +68,7 @@ describe("finishing", function () {
     finA.calledWith(result).should.be.true;
     finB.calledWith(result).should.be.true;
   });
-  
+
   it("should call finisher functions despite error", function () {
     let result = { content: {}, view: createView() };
 
@@ -77,7 +77,7 @@ describe("finishing", function () {
 
     let finB = sinon.spy();
     finishing.register("finB", finB);
-    
+
     finishing.finish(result);
     finB.calledWith(result).should.be.true;
   });
@@ -170,7 +170,7 @@ describe("finishing", function () {
   });
 
   describe("scrolling and focus", function () {
-    var getElementCoordinatesStub, result, focusableOne, focusableTwo;
+    var result, focusableOne, focusableTwo;
 
     beforeEach(function () {
       result = {
@@ -178,25 +178,32 @@ describe("finishing", function () {
         content: {}
       };
 
+      sinon.spy(finishing, "setFocus");
+      sinon.stub(finishing, "scrollIntoView");
+      sinon.stub(finishing, "isDisplayed");
+
       focusableOne = document.createElement("div");
       focusableOne.setAttribute("data-jsua-focus", true);
       result.view.appendChild(focusableOne);
       sinon.spy(focusableOne, "focus");
-      focusableOne.scrollIntoView = sinon.stub();
 
       focusableTwo = document.createElement("div");
       focusableTwo.setAttribute("data-jsua-focus", true);
       result.view.appendChild(focusableTwo);
       sinon.spy(focusableTwo, "focus");
-      focusableTwo.scrollIntoView = sinon.stub();
     });
 
-    it("should focus on the first focus element", function () {      
+    it("should focus on the first focus element", function () {
       function verifySpies() {
         focusableOne.focus.called.should.be.true;
-        focusableOne.scrollIntoView.called.should.be.true;
+        finishing.setFocus.calledWith(focusableOne).should.be.true;
+        finishing.isDisplayed.calledWith(focusableOne).should.be.true;
+        finishing.scrollIntoView.calledWith(focusableOne).should.be.true;
+
         focusableTwo.focus.called.should.be.false;
-        focusableTwo.scrollIntoView.called.should.be.false;  
+        finishing.setFocus.calledWith(focusableTwo).should.be.false;
+        finishing.isDisplayed.calledWith(focusableTwo).should.be.false;
+        finishing.scrollIntoView.calledWith(focusableTwo).should.be.false;
       }
 
       return Promise.resolve(result)

@@ -33,9 +33,9 @@
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
     "jsdom": "^9.11.0",
-    "url-search-params": "^0.7.0",
-    "mocha": "^3.2.0",
-    "sinon": "^1.17.7"
+    "mocha": "^5.2.0",
+    "sinon": "^1.17.7",
+    "url-search-params": "^0.7.0"
   },
   "dependencies": {}
 }

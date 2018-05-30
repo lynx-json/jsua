@@ -53,15 +53,53 @@ export function tryToSetFocus(result) {
 }
 
 export function setFocus(view) {
-  if (!exports.isDisplayed(view)) view.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+  if (!exports.isDisplayed(view)) exports.scrollIntoView(view);
   view.focus();
 }
 
 export function isDisplayed(view) {
   if (!view) return false;
+
   var rect = view.getBoundingClientRect();
+
   return rect.left >= 0 &&
     rect.left <= document.documentElement.clientWidth &&
     rect.top >= 0 &&
     rect.top <= document.documentElement.clientHeight;
+}
+
+function easeInOut(t, b, c, d) {
+  return -c/2 * (Math.cos(Math.PI*t/d) - 1) + b;
+}
+
+export function scrollIntoView(view) {
+  if (!view) return;
+
+  var parent = findScrollableParent(view);
+  if (!parent) return;
+
+  var frames = 30;
+  var frame = 0;
+  var scrollIntoViewTopMargin = 35;
+  var start = parent.scrollTop - scrollIntoViewTopMargin;
+  var change = view.getBoundingClientRect().top - parent.getBoundingClientRect().top;
+
+  function step() {
+    var moveTo = easeInOut(frame++, start, change, frames);
+    parent.scrollTop = moveTo;
+    if (frame !== frames) window.requestAnimationFrame(step);
+  }
+
+  window.requestAnimationFrame(step);
+}
+
+function findScrollableParent(view) {
+  if (!view) return;
+
+  var current = view.parentElement;
+
+  while (!!current && current.matches("[data-jsua-context~=app]") === false) {
+    if (current.style.overflowY === "scroll" || current.style.overflowY === "auto") return current;
+    current = current.parentElement;
+  }
 }
