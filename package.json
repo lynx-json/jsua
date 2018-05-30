@@ -9,7 +9,7 @@
   "scripts": {
     "test": "mocha --recursive test",
     "pretest": "npm run build",
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "build": "babel src -d dist"
   },
   "repository": {
