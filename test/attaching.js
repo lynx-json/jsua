@@ -9,75 +9,85 @@ chai.use(chaiAsPromised);
 var should = chai.should();
 
 function createView() {
-  var view = { 
+  var view = {
     matches: sinon.stub(),
     querySelectorAll: sinon.stub()
   };
-  
+
   view.matches.returns(false);
   view.querySelectorAll.returns([]);
-  
+
   return view;
 }
 
 describe("attaching", function () {
-  it("should reject when no params", function () {
-    return attaching.attach().should.be.rejected;
+  it("should throw when no params", function () {
+    expect(function () {
+      attaching.attach();
+    }).to.throw();
   });
-  
-  it("should reject when param is not an object", function () {
-    return attaching.attach("this is not a view").should.be.rejected;
+
+  it("should throw when param is not an object", function () {
+    expect(function () {
+      attaching.attach("this is not a view");
+    }).to.throw();
   });
-  
-  it("should reject when param doesn't have 'view' property", function () {
-    return attaching.attach({}).should.be.rejected;
+
+  it("should throw when param doesn't have 'view' property", function () {
+    expect(function () {
+      attaching.attach({});
+    }).to.throw();
   });
-  
-  it("should reject when there are no registrations", function () {
-    return attaching.attach({ view: {} }).should.be.rejected;
+
+  it("should throw when there are no registrations", function () {
+    expect(function () {
+      attaching.attach({ view: {} });
+    }).to.throw();
   });
-  
-  it("should reject when the view is not attached", function () {
+
+  it("should throw when the view is not attached", function () {
     attaching.register("mock-attacher", function () {});
-    return attaching.attach({ view: {} }).should.be.rejected;
+    expect(function () {
+      attaching.attach({ view: {} });
+    }).to.throw();
   });
-  
-  it("should reject when the view is discarded", function () {
+
+  it("should throw when the view is discarded", function () {
     attaching.register("mock-attacher", function () {
       return {
         discard: true
       };
     });
-    
-    return attaching.attach({ view: {} }).should.be.rejected;
+
+    expect(function () {
+      attaching.attach({ view: {} });
+    }).to.throw();
   });
-  
+
   it("should have Error.name of 'ViewDiscardedError' when the view is discarded", function () {
     attaching.register("mock-attacher", function () {
       return {
         discard: true
       };
     });
-    
-    return attaching.attach({ view: {} }).catch(function (err) {
-      expect(err.name).to.equal("ViewDiscardedError");
-    });
+
+    expect(function () {
+      attaching.attach({ view: {} });
+    }).to.throw({ name: "ViewDiscardedError" });
   });
-  
-  it("should resolve when the view is attached", function () {
+
+  it("should return when the view is attached", function () {
     sinon.stub(attaching, "raiseAttachDetachEvent");
-    
+
     attaching.register("mock-attacher", function () {
       return {
         attach: function () {}
       };
     });
-    
+
     let result = { view: createView() };
-    
-    return attaching.attach(result).then(function (r) {
-      expect(r).to.equal(result);
-      attaching.raiseAttachDetachEvent.restore();
-    });
+    let r = attaching.attach(result);
+    expect(r).to.equal(result);
+    attaching.raiseAttachDetachEvent.restore();
   });
 });
