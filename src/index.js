@@ -5,7 +5,7 @@ import * as attaching from "./attaching";
 import * as finishing from "./finishing";
 import urlModule from "url";
 
-function fetch(url, options) {
+function defaultFetchFn(url, options) {
   options = options || {};
   var appView = findAppViewFor(options.origin);
   var urlObj = urlModule.parse(url);
@@ -34,6 +34,21 @@ function fetch(url, options) {
       result = finishing.finish(result);
       return result;
     });
+}
+
+var fetchFn = defaultFetchFn;
+
+function fetch(url, options) {
+  return fetchFn(url, options);
+}
+
+function getFetchFn() {
+  return fetchFn;
+}
+
+function setFetchFn(newFetchFn) {
+  if (typeof newFetchFn !== 'function') throw new Error('New fetch fn must be a function.');
+  fetchFn = newFetchFn;
 }
 
 function isSameDocumentReference(appView, urlObj, options) {
@@ -89,6 +104,8 @@ transferring.register("data", transferring.data);
 export {
   media,
   fetch,
+  getFetchFn,
+  setFetchFn,
   transferring,
   building,
   attaching,
