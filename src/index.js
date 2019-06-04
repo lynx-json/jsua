@@ -7,6 +7,20 @@ import urlModule from "url";
 
 function defaultFetchFn(url, options) {
   options = options || {};
+  var promiseForSameDocumentReferenceView = getPromiseForSameDocumentReferenceView(url, options);
+  if (promiseForSameDocumentReferenceView) return promiseForSameDocumentReferenceView;
+
+  return Promise.resolve({ url, options })
+    .then(transferring.transfer)
+    .then(building.build)
+    .then(function (result) {
+      result = attaching.attach(result);
+      result = finishing.finish(result);
+      return result;
+    });
+}
+
+function getPromiseForSameDocumentReferenceView(url, options) {
   var appView = findAppViewFor(options.origin);
   var urlObj = urlModule.parse(url);
 
@@ -25,15 +39,6 @@ function defaultFetchFn(url, options) {
 
     return Promise.resolve({ view: appView });
   }
-
-  return Promise.resolve({ url, options })
-    .then(transferring.transfer)
-    .then(building.build)
-    .then(function (result) {
-      result = attaching.attach(result);
-      result = finishing.finish(result);
-      return result;
-    });
 }
 
 var fetchFn = defaultFetchFn;
@@ -103,6 +108,7 @@ transferring.register("data", transferring.data);
 
 export {
   media,
+  getPromiseForSameDocumentReferenceView,
   fetch,
   getFetchFn,
   setFetchFn,
